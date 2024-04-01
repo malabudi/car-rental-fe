@@ -14,9 +14,6 @@ export default function SecurityQuestions() {
     const [answer1, setAnswer1] = useState('');
     const [answer2, setAnswer2] = useState('');
     const [answer3, setAnswer3] = useState('');
-    const [isSuccess1, setIsSuccess1] = useState(false);
-    const [isSuccess2, setIsSuccess2] = useState(false);
-    const [isSuccess3, setIsSuccess3] = useState(false);
 
     const router = useRouter();
 
@@ -77,8 +74,8 @@ export default function SecurityQuestions() {
             <h1>Pick your security questions</h1>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <select onChange={handleQuestion1Change} required>
-                        <option value='' selected> -- Select a Security Question -- </option>
+                    <select onChange={handleQuestion1Change} defaultValue={''} required>
+                        <option value='' disabled> -- Select a Security Question -- </option>
                         {data?.map((item: any) => <option key={item.QuestionID} value={item.QuestionID}>{item.Question}</option>)}
                     </select>
 
@@ -93,8 +90,8 @@ export default function SecurityQuestions() {
                 </div>
 
                 <div>
-                    <select onChange={handleQuestion2Change} required>
-                        <option value='' selected> -- Select a Security Question -- </option>
+                    <select onChange={handleQuestion2Change} defaultValue={''} required>
+                        <option value='' disabled> -- Select a Security Question -- </option>
                         {data?.map((item: any) => <option key={item.QuestionID} value={item.QuestionID}>{item.Question}</option>)}
                     </select>
 
@@ -109,8 +106,8 @@ export default function SecurityQuestions() {
                 </div>
 
                 <div>
-                    <select onChange={handleQuestion3Change} required>
-                        <option value='' selected> -- Select a Security Question -- </option>
+                    <select onChange={handleQuestion3Change} defaultValue={''} required>
+                        <option value='' disabled> -- Select a Security Question -- </option>
                         {data?.map((item: any) => <option key={item.QuestionID} value={item.QuestionID}>{item.Question}</option>)}
                     </select>
 
@@ -124,7 +121,7 @@ export default function SecurityQuestions() {
                     />
                 </div>
 
-                <button type="submit">Submit</button>
+                <button type="submit" className='button'>Submit</button>
             </form>
         </div>
     );
