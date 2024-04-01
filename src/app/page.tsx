@@ -9,11 +9,16 @@ export default function Home() {
     <div className={styles.main}>
       <h1>Home Page</h1>
       { userEmail ? 
-      <h2>Welcome, {userEmail}</h2>
+      // Logged In
+      <>
+        <h2>Welcome, {userEmail}</h2>
+        <Link href='listings' className='button'>View Listings</Link>
+      </>
       :
+      // Guest
       <div className={styles.btnContainer}>
-        <Link href='signup'>Create Account</Link>
-        <Link href='login'>Log In</Link>
+        <Link href='signup' className='button'>Create Account</Link>
+        {/*<Link href='login'>Log In</Link>*/}
       </div>
       }
       
