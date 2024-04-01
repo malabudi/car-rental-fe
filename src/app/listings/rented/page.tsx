@@ -1,23 +1,21 @@
 'use client'
 
-import { fetchListingsByRenteeId } from "@/hooks/listings";
+import { fetchListingsByRenterId } from "@/hooks/listings";
 import { useQuery } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
-import styles from "./page.module.css";
 import Link from "next/link";
+import styles from "./page.module.css";
 
-export default function ManageListings() {
+export default function RentedCars() {
+
     const { data, status } = useQuery({
         queryKey: ['listings'], 
-        queryFn: async () => await fetchListingsByRenteeId(Number(getCookie('user_id')))
+        queryFn: async () => await fetchListingsByRenterId(Number(getCookie('user_id')))
     });
 
     return (
-        <div className={styles.container}>
-            <div>
-                <h1>Your Car Listings:</h1>
-                <Link href='manage/new' className='button'>Add New Listing</Link>
-            </div>
+        <div className='container'>
+            <h1>Your Rented Cars:</h1>
             <table className={styles.styledTable}>
                 <thead>
                     <tr>
@@ -28,7 +26,6 @@ export default function ManageListings() {
                         <th>Booked Until</th>
                         <th>Pickup Location</th>
                         <th>Price</th>
-                        <th>Is Currently Rented</th>
                         <th>Current Balance</th>
                         <th>Edit Listing</th>
                     </tr>
@@ -44,9 +41,8 @@ export default function ManageListings() {
                                 <td>{item.BookedUntil.split('T')[0]}</td>
                                 <td>{item.PickUpLocation}</td>
                                 <td>${item.Price}</td>
-                                <td>{item.IsAvailable ? 'No' : 'Yes'}</td>
                                 <td>${item.Balance}</td>
-                                <td><Link href={`manage/${item.CarID}`} className='button'>Edit</Link></td>
+                                <td><Link href={`rented/pay/${item.CarID}`} className='button'>Pay</Link></td>
                             </tr>
                         </>
                     )}
