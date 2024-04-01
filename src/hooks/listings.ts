@@ -10,7 +10,7 @@ export const createListing = async (newListing: any) => {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to create account');
+        throw new Error('Failed to create listing');
     }
 
     return response.json();
@@ -26,7 +26,56 @@ export const updateListing = async (updatedListing: any) => {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to create account');
+        throw new Error('Failed to update current listing');
+    }
+
+    return response.json();
+};
+
+// Book car with this method
+export const updateBooking = async (updatedBooking: any) => {
+    const response = await fetch(`${API_PATH}/listings/booking`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedBooking),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to book car');
+    }
+
+    return response.json();
+};
+
+// make payment
+export const updateBalance = async (updatedBooking: any) => {
+    const response = await fetch(`${API_PATH}/listings/pay`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedBooking),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to make payment');
+    }
+
+    return response.json();
+};
+
+export const fetchListingsByRenterId = async (renterId: Number) => {
+    const response = await fetch(`${API_PATH}/listings/renter/${renterId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch questions');
     }
 
     return response.json();

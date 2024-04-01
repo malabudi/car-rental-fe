@@ -12,7 +12,7 @@ export default function EditListing({ params }: any) {
 
     const router = useRouter();
 
-    const { data, status } = useQuery({
+    const { isLoading, data, status } = useQuery({
         queryKey: ['car'], 
         queryFn: async () => await fetchListingsByCarId(params.carId)
     });
@@ -37,12 +37,16 @@ export default function EditListing({ params }: any) {
         e.preventDefault();
     }
 
+    if (isLoading) {
+        return <h1>Loading...</h1>
+    }
+
     return (
         <div>
             <h1>Edit Car Listing</h1>
-            <h3>Car: {data[0].Model}</h3>
-            <h3>Year: {data[0].CarYear}</h3>
-            <h3>Mileage: {data[0].Mileage} Miles</h3>
+            <h3>Car: {data[0]?.Model}</h3>
+            <h3>Year: {data[0]?.CarYear}</h3>
+            <h3>Mileage: {data[0]?.Mileage} Miles</h3>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="#availCalendar">Rent Availability Date:</label>
@@ -69,7 +73,7 @@ export default function EditListing({ params }: any) {
                     />
                 </div>
 
-                <button type="submit">Save</button>
+                <button type="submit" className='button'>Save</button>
             </form>
         </div>
     );

@@ -1,0 +1,9 @@
+.bookingForm {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bookingInput {
+    margin: 2rem 0;
+}
