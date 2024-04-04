@@ -8,10 +8,23 @@ import styles from "./page.module.css";
 
 export default function RentedCars() {
 
-    const { data, status } = useQuery({
+    const { isLoading, data, status } = useQuery({
         queryKey: ['listings'], 
         queryFn: async () => await fetchListingsByRenterId(Number(getCookie('user_id')))
     });
+
+    if (isLoading) {
+        return <h1>Loading...</h1>
+    }
+
+    if (!data) {
+        return (
+            <div>
+                <h1>You currently Have No Cars Rented</h1>
+                <Link href='listings/'>Go Back</Link>
+            </div>
+        )
+    }
 
     return (
         <div className='container'>
@@ -37,8 +50,8 @@ export default function RentedCars() {
                                 <td>{item.Model}</td>
                                 <td>{item.CarYear}</td>
                                 <td>{item.Mileage}</td>
-                                <td>{item.AvailCalendar.split('T')[0]}</td>
-                                <td>{item.BookedUntil.split('T')[0]}</td>
+                                <td>{item.AvailCalendar?.split('T')[0]}</td>
+                                <td>{item.BookedUntil?.split('T')[0]}</td>
                                 <td>{item.PickUpLocation}</td>
                                 <td>${item.Price}</td>
                                 <td>${item.Balance}</td>

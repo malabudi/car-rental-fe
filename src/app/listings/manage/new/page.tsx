@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { getCookie } from "cookies-next";
+import { sendCarListingCreationEmail } from "@/hooks/emails";
 
 export default function ManageListings() {
     const [model, setModel] = useState('');
@@ -25,9 +26,23 @@ export default function ManageListings() {
         onError:(err)=>{
             console.log(err)
         }
-    })
+    });
+
+    const useSendCarListingCreationEmail = useMutation({
+        mutationFn: sendCarListingCreationEmail,
+        onSuccess:(res) => {
+        },
+        onError:(err)=>{
+            console.log(err)
+        }
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        useSendCarListingCreationEmail.mutate({
+            model: model,
+            year: year
+        });
+
         useCreateListing.mutate({
             renteeId: Number(getCookie('user_id')),
             model: model,
@@ -37,15 +52,16 @@ export default function ManageListings() {
             pickUpLocation: pickupLocation,
             price: price
         });
+
         e.preventDefault();
     }
 
     return (
-        <div>
+        <div className='container'>
             <h1>New Listing:</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="#model">Enter Model:</label>
+                <div style={{marginTop: '20px'}}>
+                    <label htmlFor="#model">Enter Model: </label>
                     <input
                         placeholder="Car Model"
                         type={"text"}
@@ -56,8 +72,8 @@ export default function ManageListings() {
                     />
                 </div>
                 
-                <div>
-                    <label htmlFor="#year">Enter Year:</label>
+                <div style={{marginTop: '10px'}}>
+                    <label htmlFor="#year">Enter Year: </label>
                     <input
                         placeholder="Car Year"
                         type={"text"}
@@ -68,8 +84,8 @@ export default function ManageListings() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="#mileage">Enter Mileage:</label>
+                <div style={{marginTop: '10px'}}>
+                    <label htmlFor="#mileage">Enter Mileage: </label>
                     <input
                         placeholder="Mileage"
                         type={"number"}
@@ -80,8 +96,8 @@ export default function ManageListings() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="#availCalendar">Rent Availability Date:</label>
+                <div style={{marginTop: '10px'}}>
+                    <label htmlFor="#availCalendar">Rent Availability Date: </label>
                     <input
                         type={"date"}
                         id="availCalendar"
@@ -91,8 +107,8 @@ export default function ManageListings() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="#pickupLocatoin">Pickup Location:</label>
+                <div style={{marginTop: '10px'}}>
+                    <label htmlFor="#pickupLocatoin">Pickup Location: </label>
                     <input
                         placeholder="State, City"
                         type={"text"}
@@ -103,8 +119,8 @@ export default function ManageListings() {
                     />
                 </div>
 
-                <div>
-                    <label htmlFor="#price">Price:</label>
+                <div style={{marginTop: '10px'}}>
+                    <label htmlFor="#price">Price: </label>
                     <input
                         placeholder="Car Rental Price"
                         type={"text"}
@@ -115,7 +131,7 @@ export default function ManageListings() {
                     />
                 </div>
 
-                <button type="submit" className='button'>Submit</button>
+                <button type="submit" className='button' style={{marginTop: '20px'}}>Submit</button>
             </form>
         </div>
     );

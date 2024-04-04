@@ -2,20 +2,28 @@
 
 import { fetchListingsByCarId, updateListing } from "@/hooks/listings";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { getCookie } from "cookies-next";
+import { sendCarListingUpdateEmail } from "@/hooks/emails";
 
 export default function EditListing({ params }: any) {
-    const [availableDate, setAvailableDate] = useState('');
-    const [price, setPrice] = useState(0.00);
-
     const router = useRouter();
 
     const { isLoading, data, status } = useQuery({
         queryKey: ['car'], 
-        queryFn: async () => await fetchListingsByCarId(params.carId)
+        queryFn: async () => await fetchListingsByCarId(params.carId),
     });
+
+    const [availableDate, setAvailableDate] = useState(data ? data[0]?.AvailCalendar : null);
+    const [price, setPrice] = useState(data ? data[0]?.Price : null);
+
+    useEffect (() => {
+        if (data) {
+            setAvailableDate(data[0]?.AvailCalendar);
+            setPrice(data[0]?.Price);
+        }
+    }, [data]);
 
     const useUpdateListing = useMutation({
         mutationFn: updateListing,
@@ -26,14 +34,31 @@ export default function EditListing({ params }: any) {
         onError:(err)=>{
             console.log(err)
         }
-    })
+    });
+
+    const useSendCarListingUpdateEmail = useMutation({
+        mutationFn: sendCarListingUpdateEmail,
+        onSuccess:(res) => {
+        },
+        onError:(err)=>{
+            console.log(err)
+        }
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        useSendCarListingUpdateEmail.mutate({
+            model: data[0]?.Model,
+            year: data[0]?.CarYear,
+            availabilityDate: availableDate,
+            price: price
+        });
+
         useUpdateListing.mutate({
             renteeId: Number(getCookie('user_id')),
             availCalendar: availableDate,
             price: price
         });
+
         e.preventDefault();
     }
 
@@ -42,7 +67,7 @@ export default function EditListing({ params }: any) {
     }
 
     return (
-        <div>
+        <div className='container'>
             <h1>Edit Car Listing</h1>
             <h3>Car: {data[0]?.Model}</h3>
             <h3>Year: {data[0]?.CarYear}</h3>
@@ -67,7 +92,7 @@ export default function EditListing({ params }: any) {
                         type={"text"}
                         id="price"
                         name="price"
-                        onChange={(e) => setPrice(parseFloat(e.target.value))}
+                        onChange={(e) => setPrice(e.target.value)}
                         defaultValue={data[0].Price}
                         required
                     />

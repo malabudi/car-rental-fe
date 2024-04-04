@@ -4,6 +4,7 @@ import { fetchListingsByCarId, updateBalance } from "@/hooks/listings";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useRouter } from 'next/navigation';
+import { sendPaymentPayerEmail, sendPaymentRenterEmail } from "@/hooks/emails";
 
 export default function RentedCars({params}: any) {
     const [payment, setPayment] = useState(0.00);
@@ -26,11 +27,42 @@ export default function RentedCars({params}: any) {
         }
     });
 
+    const useSendPaymentPayerEmail = useMutation({
+        mutationFn: sendPaymentPayerEmail,
+        onSuccess:(res) => {
+        },
+        onError:(err)=>{
+            console.log(err)
+        }
+    });
+
+    const useSendPaymentRenterEmail = useMutation({
+        mutationFn: sendPaymentRenterEmail,
+        onSuccess:(res) => {
+        },
+        onError:(err)=>{
+            console.log(err)
+        }
+    });
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        useSendPaymentPayerEmail.mutate({
+            amount: payment,
+            model: data[0]?.Model,
+            year: data[0]?.CarYear
+        });
+
+        useSendPaymentRenterEmail.mutate({
+            amount: payment,
+            model: data[0]?.Model,
+            year: data[0]?.CarYear
+        });
+
         useUpdateBalance.mutate({
             carId: Number(params.carId),
             payment: Number(payment)
         });
+
         e.preventDefault();
     }
 

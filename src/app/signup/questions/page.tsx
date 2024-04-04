@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { FormEvent } from "react";
 import { useState } from "react";
 import { getCookie } from 'cookies-next';
+import { sendAccountCreationEmail } from "@/hooks/emails";
 
 export default function SecurityQuestions() {
     const [question1Id, setQuestion1Id] = useState(0);
@@ -42,7 +43,15 @@ export default function SecurityQuestions() {
         onError:(err)=>{
             console.log(err)
         }
-    })
+    });
+
+    const useSendAccountCreationEmail = useMutation({
+        mutationFn: sendAccountCreationEmail,
+        onSuccess:(res) => {
+        },
+        onError:(err)=>{
+        }
+    });
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         useAddSecurityQuestion.mutate({
@@ -61,6 +70,10 @@ export default function SecurityQuestions() {
             userId: Number(getCookie('user_id')),
             questionId: Number(question3Id),
             answer: answer3
+        });
+
+        useSendAccountCreationEmail.mutate({
+            email: getCookie('user_email')
         });
 
         router.push('/');

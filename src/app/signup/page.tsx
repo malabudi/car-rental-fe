@@ -31,28 +31,32 @@ export default function Create() {
     };
 
     return (
-        <div>
+        <div className='container'>
             <h1>Create Account</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="#email"> Enter your email:</label>
-                <input
-                    placeholder="Enter Email"
-                    type={"email"}
-                    id="email"
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
+            <form onSubmit={handleSubmit} className='container'>
+                <div>
+                    <label htmlFor="#email"> Enter your email: </label>
+                    <input
+                        placeholder="Enter Email"
+                        type={"email"}
+                        id="email"
+                        name="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />    
+                </div>
 
-                <label htmlFor="#password"> Enter your password:</label>
-                <input
-                    placeholder="Password"
-                    type={"password"}
-                    id="password"
-                    name="password"
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                <div>
+                    <label htmlFor="#password"> Enter your password: </label>
+                    <input
+                        placeholder="Password"
+                        type={"password"}
+                        id="password"
+                        name="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
 
                 <button type="submit" className='button'>Submit</button>
             </form>
