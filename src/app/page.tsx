@@ -19,6 +19,7 @@ export default function Home() {
       // Guest
       <div className={styles.btnContainer}>
         <Link href='signup' className='button'>Create Account</Link>
+        <Link href='login' className='button' style={{marginLeft: '20px'}}>Log In</Link>
       </div>
       }
       

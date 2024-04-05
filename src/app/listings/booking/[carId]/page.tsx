@@ -74,7 +74,7 @@ export default function BookCar({ params }: any) {
             <h1>Book Your Car</h1>
             <form onSubmit={handleSubmit} className={styles.bookingForm}>
                 <div className={styles.bookingInput}>
-                    <label htmlFor="#bookedUntil">Rent Availability Date: </label>
+                    <label htmlFor="#bookedUntil">Booked Until: </label>
                     <input
                         type={"date"}
                         id="bookedUntil"
